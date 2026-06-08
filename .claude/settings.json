@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(python demos/chatbot/chatbot.py)",
-      "Bash(PYTHONIOENCODING=utf-8 python demos/chatbot/chatbot.py)"
+      "Bash(PYTHONIOENCODING=utf-8 python demos/chatbot/chatbot.py)",
+      "Bash(mkdir -p d:/0my/claude/myAgent/docs/pythonLearn)"
+    ],
+    "additionalDirectories": [
+      "d:\\0my\\claude\\myAgent\\docs"
     ]
   }
 }
