@@ -83,7 +83,7 @@ def execute_tool(tool_name, tool_input):
                 capture_output=True,
                 text=True,
                 timeout=10,
-                cwd="d:/0my/claude/myAgent"  # 工作目录设为项目根目录
+                cwd="/Users/wangjie/AI/myAgent"  # 工作目录设为项目根目录
             )
 
             # 组装输出
