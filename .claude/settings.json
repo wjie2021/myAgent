@@ -6,7 +6,8 @@
       "Bash(mkdir -p d:/0my/claude/myAgent/docs/pythonLearn)"
     ],
     "additionalDirectories": [
-      "d:\\0my\\claude\\myAgent\\docs"
+      "d:\\0my\\claude\\myAgent\\docs",
+      "d:\\0my\\claude\\myAgent\\memory"
     ]
   }
 }
