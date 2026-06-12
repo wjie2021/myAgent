@@ -113,13 +113,13 @@ print(message.content[0].text)
 
 体会：无状态 + 手动拼上下文。
 
-📖 Python 查阅：[依赖管理](python/依赖管理.md)
+📖 Python 查阅：[依赖管理](python/依赖管理.md)、[模块与导入](python/模块与导入.md)
 
 ### 1.2 加上工具调用
 
 让 AI 能调用你写的函数（比如查天气）。
 
-📖 Python 查阅：[数据结构速查](python/数据结构速查.md)（解析 API 返回值）
+📖 Python 查阅：[数据结构与类型](python/数据结构与类型.md)（解析 API 返回值）
 
 ### 1.3 跑通 ReAct Agent
 
@@ -129,7 +129,7 @@ print(message.content[0].text)
 - Thought/Action 格式是什么？→ [ReAct 模式](agent/ReAct模式与输出格式.md)
 - 循环是怎么控制的？→ 看 `main.py` 的 for 循环
 
-📖 Python 查阅：[常见语法速查](python/常见语法速查.md)
+📖 Python 查阅：[控制流与函数](python/控制流与函数.md)
 
 ---
 
@@ -221,12 +221,13 @@ print(message.content[0].text)
 
 不用系统学，遇到不懂的查速查手册：
 
-| 文档 | 什么时候查 |
+| 文档 | 什么时候看 |
 |------|-----------|
 | [python与java对比](python/python与java对比.md) | 刚接触 Python 时 |
+| [数据结构与类型](python/数据结构与类型.md) | 解析 API 返回值时 |
+| [控制流与函数](python/控制流与函数.md) | 写 Agent 逻辑时 |
+| [模块与导入](python/模块与导入.md) | 组织代码文件时 |
 | [依赖管理](python/依赖管理.md) | 安装包报错时 |
-| [数据结构速查](python/数据结构速查.md) | 解析 API 返回值时 |
-| [常见语法速查](python/常见语法速查.md) | 看不懂 Python 语法时 |
 
 ---
 

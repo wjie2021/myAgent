@@ -7,12 +7,13 @@ docs/
 ├── README.md                    ← 本文件：目录索引
 ├── learning-path.md             ← 学习路径规划
 │
-├── python/                      ← Python 速查
+├── python/                      ← Python 学习
 │   ├── python与java对比.md      ← 程序结构对比
+│   ├── 数据结构与类型.md        ← list/dict/tuple/set/str
+│   ├── 控制流与函数.md          ← if/for/while/def/class
+│   ├── 模块与导入.md            ← import/文件操作/环境变量
 │   ├── 依赖管理.md              ← pip 与 requirements.txt
-│   ├── 全局python与虚拟环境.md  ← venv 使用
-│   ├── 数据结构速查.md          ← list/dict/json
-│   └── 常见语法速查.md          ← if/for/try/import
+│   └── 全局python与虚拟环境.md  ← venv 使用
 │
 ├── agent/                       ← Agent 核心概念
 │   ├── ReAct模式与输出格式.md   ← ReAct 范式详解
@@ -37,9 +38,10 @@ docs/
 3. [ReAct 模式与输出格式](agent/ReAct模式与输出格式.md) — 理解 Agent 核心范式
 4. [Function Calling 详解](notes/day01-function-calling.md) — 理解工具调用机制
 
-**Python 速查（遇到不懂的来查）：**
+**Python 学习（在 Agent 开发中自然学习）：**
 
 1. [Python 与 Java 对比](python/python与java对比.md) — 刚接触时看
-2. [数据结构速查](python/数据结构速查.md) — 解析 API 返回值时
-3. [常见语法速查](python/常见语法速查.md) — 看不懂语法时
-4. [依赖管理](python/依赖管理.md) — 安装包报错时
+2. [数据结构与类型](python/数据结构与类型.md) — 解析 API 返回值时
+3. [控制流与函数](python/控制流与函数.md) — 写 Agent 逻辑时
+4. [模块与导入](python/模块与导入.md) — 组织代码时
+5. [依赖管理](python/依赖管理.md) — 安装包报错时
