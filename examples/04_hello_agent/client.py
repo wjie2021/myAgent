@@ -8,6 +8,7 @@ class OpenAICompatibleClient:
         self.model = model
         self.client = OpenAI(api_key=api_key, base_url=base_url)
 
+    # 此处为了方便，直接将用户和LLM的对话全部放到了 user的内容中。
     def generate(self, prompt: str, system_prompt: str) -> str:
         """调用LLM API来生成回应。"""
         print("正在调用大语言模型...")
