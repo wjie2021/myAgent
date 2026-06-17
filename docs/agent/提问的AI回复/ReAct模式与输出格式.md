@@ -1,7 +1,11 @@
 # ReAct 模式与输出格式
 
 > Agent 开发中最经典的范式：让模型"说出"思考过程，而不是只输出结果。
+Reasoning + Acting = ReAct
 
+论文标题：ReAct: Synergizing Reasoning and Acting in Language Models（2022）
+
+核心思想：让模型先想（Thought）再做（Action），而不是直接输出答案。
 ## 核心概念
 
 ### 大模型的两种"思考"
