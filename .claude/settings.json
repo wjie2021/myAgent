@@ -5,7 +5,19 @@
       "Bash(PYTHONIOENCODING=utf-8 python demos/chatbot/chatbot.py)",
       "Bash(mkdir -p d:/0my/claude/myAgent/docs/pythonLearn)",
       "Read(//c/Users/123/.claude/projects/D--2Proj-cocam-wms/**)",
-      "Bash(PYTHONIOENCODING=utf-8 python -c ' *)"
+      "Bash(PYTHONIOENCODING=utf-8 python -c ' *)",
+      "Bash(ls -la \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\d--0my-claude-myAgent\" 2>/dev/null || echo \"OLD_DIR_MISSING\")",
+      "Read(//c/Users/123/.claude/projects/d--0my-claude-myAgent/**)",
+      "Bash(ls -la \"C:\\\\Users\\\\123\\\\.claude\\\\projects\" 2>/dev/null)",
+      "Read(//c/Users/123/.claude/projects/**)",
+      "Bash(ls -la \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\d--0my-claude-myAgent\\\\memory\" 2>/dev/null)",
+      "Read(//c/Users/123/.claude/projects/d--0my-claude-myAgent/memory/**)",
+      "Bash(ls -la \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\" 2>/dev/null)",
+      "Read(//c/Users/123/.claude/projects/c--Users-123-Documents-GitHub-myAgent/**)",
+      "Bash(ls -la \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\\\\memory\" 2>/dev/null)",
+      "Read(//c/Users/123/.claude/projects/c--Users-123-Documents-GitHub-myAgent/memory/**)",
+      "Bash(cp -n \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\d--0my-claude-myAgent\"/*.jsonl \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent/\" 2>/dev/null && echo \"jsonl files copied \\(no overwrite\\)\" || echo \"jsonl copy done\")",
+      "Bash(echo \"=== Sessions \\(.jsonl\\) ===\" && ls \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\"/*.jsonl 2>/dev/null | wc -l && echo \"=== Memory files ===\" && ls \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\\\\memory\" 2>/dev/null | wc -l && echo \"=== Subdirectories ===\" && ls -d \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\"/*/ 2>/dev/null)"
     ],
     "additionalDirectories": [
       "d:\\0my\\claude\\myAgent\\docs",
