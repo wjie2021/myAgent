@@ -17,11 +17,13 @@
       "Bash(ls -la \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\\\\memory\" 2>/dev/null)",
       "Read(//c/Users/123/.claude/projects/c--Users-123-Documents-GitHub-myAgent/memory/**)",
       "Bash(cp -n \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\d--0my-claude-myAgent\"/*.jsonl \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent/\" 2>/dev/null && echo \"jsonl files copied \\(no overwrite\\)\" || echo \"jsonl copy done\")",
-      "Bash(echo \"=== Sessions \\(.jsonl\\) ===\" && ls \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\"/*.jsonl 2>/dev/null | wc -l && echo \"=== Memory files ===\" && ls \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\\\\memory\" 2>/dev/null | wc -l && echo \"=== Subdirectories ===\" && ls -d \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\"/*/ 2>/dev/null)"
+      "Bash(echo \"=== Sessions \\(.jsonl\\) ===\" && ls \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\"/*.jsonl 2>/dev/null | wc -l && echo \"=== Memory files ===\" && ls \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\\\\memory\" 2>/dev/null | wc -l && echo \"=== Subdirectories ===\" && ls -d \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\"/*/ 2>/dev/null)",
+      "Bash(mkdir -p \"c:/Users/123/Documents/GitHub/myAgent/experiments\")"
     ],
     "additionalDirectories": [
       "d:\\0my\\claude\\myAgent\\docs",
-      "d:\\0my\\claude\\myAgent\\memory"
+      "d:\\0my\\claude\\myAgent\\memory",
+      "c:\\Users\\123\\Documents\\GitHub\\myAgent"
     ]
   }
 }
