@@ -18,12 +18,16 @@
       "Read(//c/Users/123/.claude/projects/c--Users-123-Documents-GitHub-myAgent/memory/**)",
       "Bash(cp -n \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\d--0my-claude-myAgent\"/*.jsonl \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent/\" 2>/dev/null && echo \"jsonl files copied \\(no overwrite\\)\" || echo \"jsonl copy done\")",
       "Bash(echo \"=== Sessions \\(.jsonl\\) ===\" && ls \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\"/*.jsonl 2>/dev/null | wc -l && echo \"=== Memory files ===\" && ls \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\\\\memory\" 2>/dev/null | wc -l && echo \"=== Subdirectories ===\" && ls -d \"C:\\\\Users\\\\123\\\\.claude\\\\projects\\\\c--Users-123-Documents-GitHub-myAgent\"/*/ 2>/dev/null)",
-      "Bash(mkdir -p \"c:/Users/123/Documents/GitHub/myAgent/experiments\")"
+      "Bash(mkdir -p \"c:/Users/123/Documents/GitHub/myAgent/experiments\")",
+      "Bash(sed -i 's/<font style=\"color:rgb\\(0,0,0\\);\">//g; s/<\\\\/font>//g' \"c:/Users/123/Documents/GitHub/myAgent/docs/部门AI规划/正文最终版.md\")",
+      "Bash(mkdir -p c:/Users/123/Documents/GitHub/myAgent/examples/07_ReActChat)"
     ],
     "additionalDirectories": [
       "d:\\0my\\claude\\myAgent\\docs",
       "d:\\0my\\claude\\myAgent\\memory",
-      "c:\\Users\\123\\Documents\\GitHub\\myAgent"
+      "c:\\Users\\123\\Documents\\GitHub\\myAgent",
+      "c:\\Users\\123\\Documents\\GitHub\\myAgent\\docs\\部门AI规划",
+      "c:\\Users\\123\\Documents\\GitHub\\myAgent\\examples\\07_ReActChat"
     ]
   }
 }
