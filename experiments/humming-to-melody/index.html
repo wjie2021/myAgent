@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>哼唱转旋律</title>
+    <!-- 引入 abcjs 库，用于渲染和播放 ABC 记谱法 -->
+    <script src="https://cdn.jsdelivr.net/npm/abcjs@6.4.4/dist/abcjs-basic-min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        /* 录音按钮 */
+        .record-btn {
+            display: block;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: none;
+            margin: 0 auto;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .record-btn.ready {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .record-btn.recording {
+            background: #f44336;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .record-btn.done {
+            background: #2196F3;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .record-hint {
+            text-align: center;
+            margin-top: 12px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* 状态显示 */
+        .status {
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        .status.info { background: #E3F2FD; color: #1976D2; }
+        .status.success { background: #E8F5E9; color: #388E3C; }
+        .status.error { background: #FFEBEE; color: #D32F2F; }
+
+        /* ABC 谱显示 */
+        #abc-output {
+            font-family: monospace;
+            background: #f9f9f9;
+            padding: 16px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            font-size: 14px;
+            min-height: 100px;
+            border: 1px solid #eee;
+        }
+
+        /* 播放区域 */
+        #sheet-music {
+            min-height: 150px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 16px;
+            background: #fafafa;
+        }
+
+        /* 按钮组 */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover { opacity: 0.85; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-play { background: #2196F3; color: white; }
+        .btn-copy { background: #FF9800; color: white; }
+        .btn-reset { background: #9E9E9E; color: white; }
+
+        /* 设置 */
+        .settings {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .settings label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .settings select, .settings input {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎤 哼唱转旋律</h1>
+
+    <!-- 录音卡片 -->
+    <div class="card">
+        <h2>① 录音</h2>
+        <button id="recordBtn" class="record-btn ready">开始录音</button>
+        <p class="record-hint" id="recordHint">点击开始，哼唱后再次点击停止</p>
+        <div id="recordStatus" class="status info" style="display:none;"></div>
+    </div>
+
+    <!-- 设置卡片 -->
+    <div class="card">
+        <h2>② 设置</h2>
+        <div class="settings">
+            <label>
+                调号：
+                <select id="keySelect">
+                    <option value="C" selected>C 大调</option>
+                    <option value="G">G 大调</option>
+                    <option value="F">F 大调</option>
+                    <option value="Am">A 小调</option>
+                </select>
+            </label>
+            <label>
+                拍号：
+                <select id="meterSelect">
+                    <option value="4/4" selected>4/4</option>
+                    <option value="3/4">3/4</option>
+                    <option value="2/4">2/4</option>
+                    <option value="6/8">6/8</option>
+                </select>
+            </label>
+            <label>
+                每拍音符：
+                <select id="noteLengthSelect">
+                    <option value="1/4" selected>四分音符</option>
+                    <option value="1/8">八分音符</option>
+                </select>
+            </label>
+        </div>
+    </div>
+
+    <!-- 转换卡片 -->
+    <div class="card">
+        <h2>③ 转换为谱子</h2>
+        <button id="convertBtn" class="btn btn-play" disabled>提取旋律并生成谱子</button>
+        <div id="convertStatus" class="status info" style="display:none;"></div>
+    </div>
+
+    <!-- ABC 记谱法显示 -->
+    <div class="card">
+        <h2>④ ABC 记谱法</h2>
+        <div id="abc-output">等待录音...</div>
+        <div class="btn-group">
+            <button id="playBtn" class="btn btn-play" disabled>▶ 播放</button>
+            <button id="stopBtn" class="btn btn-reset" disabled>⏹ 停止</button>
+            <button id="copyBtn" class="btn btn-copy" disabled>📋 复制 ABC</button>
+        </div>
+    </div>
+
+    <!-- 乐谱显示 -->
+    <div class="card">
+        <h2>⑤ 乐谱预览</h2>
+        <div id="sheet-music">
+            <p style="color:#999; text-align:center;">播放后显示乐谱</p>
+        </div>
+    </div>
+
+    <!-- AI 扩充提示 -->
+    <div class="card">
+        <h2>⑥ 让 AI 丰富旋律</h2>
+        <p style="color:#666; font-size:14px; line-height:1.6;">
+            复制上面的 ABC 记谱法，发给 Claude/GPT，说：<br>
+            <strong>"基于这段旋律，加上和弦伴奏，让它更丰富"</strong>
+        </p>
+    </div>
+
+    <script>
+        // ==================== 全局状态 ====================
+        let audioContext = null;        // 音频上下文
+        let mediaRecorder = null;       // 录音器
+        let audioChunks = [];           // 录音数据块
+        let audioBuffer = null;         // 解码后的音频
+        let isRecording = false;
+        let currentABC = '';            // 当前生成的 ABC 记谱法
+
+        // ==================== DOM 元素 ====================
+        const recordBtn = document.getElementById('recordBtn');
+        const recordHint = document.getElementById('recordHint');
+        const recordStatus = document.getElementById('recordStatus');
+        const convertBtn = document.getElementById('convertBtn');
+        const convertStatus = document.getElementById('convertStatus');
+        const abcOutput = document.getElementById('abc-output');
+        const playBtn = document.getElementById('playBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const sheetMusic = document.getElementById('sheet-music');
+
+        // ==================== 录音功能 ====================
+        recordBtn.addEventListener('click', async () => {
+            if (!isRecording) {
+                await startRecording();
+            } else {
+                stopRecording();
+            }
+        });
+
+        async function startRecording() {
+            try {
+                // 请求麦克风权限
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+                // 创建录音器
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                // 收集录音数据
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                // 录音结束时的处理
+                mediaRecorder.onstop = async () => {
+                    // 合并数据块
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+
+                    // 创建 AudioContext 用于后续处理
+                    if (!audioContext) {
+                        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+
+                    // 将 Blob 转换为 ArrayBuffer
+                    const arrayBuffer = await audioBlob.arrayBuffer();
+
+                    // 解码音频
+                    try {
+                        audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                        showStatus(recordStatus, `录音完成！时长: ${audioBuffer.duration.toFixed(1)}秒`, 'success');
+                        convertBtn.disabled = false;
+                    } catch (e) {
+                        showStatus(recordStatus, '音频解码失败，请重试', 'error');
+                        console.error('解码错误:', e);
+                    }
+
+                    // 停止麦克风
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                // 开始录音
+                mediaRecorder.start();
+                isRecording = true;
+
+                // 更新 UI
+                recordBtn.textContent = '停止录音';
+                recordBtn.className = 'record-btn recording';
+                recordHint.textContent = '正在录音...';
+                showStatus(recordStatus, '🎤 录音中...', 'info');
+
+            } catch (error) {
+                showStatus(recordStatus, '无法访问麦克风: ' + error.message, 'error');
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+
+                // 更新 UI
+                recordBtn.textContent = '重新录音';
+                recordBtn.className = 'record-btn done';
+                recordHint.textContent = '录音已停止';
+            }
+        }
+
+        // ==================== 音高检测 ====================
+        // 自相关算法检测基频
+        function detectPitch(buffer, sampleRate) {
+            // 取一帧数据（约 4096 个采样点，约 93ms @ 44100Hz）
+            const frameSize = 4096;
+            const results = [];
+
+            // 每隔一定步长检测一次
+            const hopSize = frameSize / 2;  // 50% 重叠
+
+            for (let start = 0; start + frameSize < buffer.length; start += hopSize) {
+                const frame = buffer.slice(start, start + frameSize);
+                const freq = autocorrelation(frame, sampleRate);
+
+                // 只保留有效频率（人声范围约 80Hz - 1000Hz）
+                if (freq > 80 && freq < 1000) {
+                    results.push({
+                        time: start / sampleRate,
+                        freq: freq
+                    });
+                }
+            }
+
+            return results;
+        }
+
+        // 自相关函数
+        function autocorrelation(buffer, sampleRate) {
+            const size = buffer.length;
+            const rms = Math.sqrt(buffer.reduce((sum, val) => sum + val * val, 0) / size);
+
+            // 太安静的帧跳过
+            if (rms < 0.01) return -1;
+
+            // 计算自相关
+            let bestOffset = -1;
+            let bestCorrelation = 0;
+
+            // 从第 20 个采样点开始（避免低频噪声）
+            // 最大到 size/2（对应最低频率约 20Hz）
+            for (let offset = 20; offset < size / 2; offset++) {
+                let correlation = 0;
+
+                for (let i = 0; i < size - offset; i++) {
+                    correlation += buffer[i] * buffer[i + offset];
+                }
+
+                // 归一化
+                correlation = correlation / (size - offset);
+
+                if (correlation > bestCorrelation) {
+                    bestCorrelation = correlation;
+                    bestOffset = offset;
+                }
+            }
+
+            // 相关性太低，认为没有音高
+            if (bestCorrelation < 0.01) return -1;
+
+            return sampleRate / bestOffset;
+        }
+
+        // ==================== 音符转换 ====================
+        // 频率转 MIDI 音符号
+        function freqToMidi(freq) {
+            return 12 * Math.log2(freq / 440) + 69;
+        }
+
+        // MIDI 音符号转 ABC 记谱法
+        function midiToABC(midi, key) {
+            // 四舍五入到最近的半音
+            midi = Math.round(midi);
+
+            // 音名 (C=0, C#=1, D=2, ...)
+            const noteNames = ['C', '^C', 'D', '^D', 'E', 'F', '^F', 'G', '^G', 'A', '^A', 'B'];
+            const noteIndex = midi % 12;
+
+            // 计算八度
+            const octave = Math.floor(midi / 12) - 1;
+
+            let note = noteNames[noteIndex];
+
+            // ABC 记谱法的八度表示：
+            // C D E F G A B (中音 C4 - B4)
+            // c d e f g a b (高音 C5 - B5)
+            // C, D, E, (低音 C3 - B3)
+
+            if (octave >= 5) {
+                // 高音用小写
+                note = note.toLowerCase();
+                if (octave >= 6) {
+                    note += "'".repeat(octave - 5);
+                }
+            } else if (octave <= 3) {
+                // 低音用大写加逗号
+                if (octave <= 2) {
+                    note += ",".repeat(3 - octave);
+                }
+            }
+            // octave == 4 时用大写，不需要额外标记
+
+            return note;
+        }
+
+        // 简谱数字表示（用于显示）
+        function midiToNumber(midi, key) {
+            // 这里简化处理，以 C 大调为例
+            const scale = [0, 2, 4, 5, 7, 9, 11]; // C D E F G A B 的半音偏移
+            const noteIndex = midi % 12;
+            const octave = Math.floor(midi / 12) - 1;
+
+            // 找到最近的音阶音
+            let degree = -1;
+            for (let i = 0; i < scale.length; i++) {
+                if (scale[i] === noteIndex) {
+                    degree = i;
+                    break;
+                }
+            }
+
+            if (degree === -1) {
+                // 半音，用 # 或 b 表示
+                return '?';
+            }
+
+            const numbers = ['1', '2', '3', '4', '5', '6', '7'];
+            let num = numbers[degree];
+
+            if (octave >= 5) num += "'".repeat(octave - 4);
+            if (octave <= 3) num += ",".repeat(4 - octave);
+
+            return num;
+        }
+
+        // ==================== 旋律处理 ====================
+        // 将音高检测结果转换为音符序列
+        function processMelody(pitchResults, settings) {
+            if (pitchResults.length === 0) return [];
+
+            const notes = [];
+            const { noteLength, meter } = settings;
+
+            // 计算每拍时长（秒）
+            // 这里简化处理，假设 BPM=120
+            const bpm = 120;
+            const beatDuration = 60 / bpm;
+
+            // 每个检测帧的时间间隔（秒）
+            // frameSize=4096, hopSize=2048, sampleRate 从 pitchResults 推算
+            const frameInterval = pitchResults.length > 1
+                ? pitchResults[1].time - pitchResults[0].time
+                : 0.047; // 约 4096/2/44100
+
+            // 合并相邻相同音符（容差 ±1 半音）
+            let lastMidi = -1;
+            let noteCount = 0;
+
+            for (let i = 0; i < pitchResults.length; i++) {
+                const { time, freq } = pitchResults[i];
+                const midi = Math.round(freqToMidi(freq));
+
+                // 与上一个音符相同（容差 1 半音）
+                if (Math.abs(midi - lastMidi) <= 1) {
+                    noteCount++;
+                } else {
+                    // 保存上一个音符
+                    if (lastMidi !== -1) {
+                        const duration = noteCount * frameInterval;
+                        notes.push({
+                            midi: lastMidi,
+                            duration: duration,
+                            beats: Math.max(1, Math.round(duration / beatDuration))
+                        });
+                    }
+
+                    lastMidi = midi;
+                    noteCount = 1;
+                }
+            }
+
+            // 保存最后一个音符
+            if (lastMidi !== -1) {
+                const duration = noteCount * frameInterval;
+                notes.push({
+                    midi: lastMidi,
+                    duration: duration,
+                    beats: Math.max(1, Math.round(duration / beatDuration))
+                });
+            }
+
+            return notes;
+        }
+
+        // 生成 ABC 记谱法
+        function generateABC(notes, settings) {
+            const { key, meter, noteLength } = settings;
+
+            // ABC 文件头
+            let abc = `X:1\n`;
+            abc += `T:哼唱旋律\n`;
+            abc += `M:${meter}\n`;
+            abc += `L:${noteLength}\n`;
+            abc += `K:${key}\n`;
+            abc += `\n`;
+
+            // 生成音符
+            let beatCounter = 0;
+            const [beatsPerMeasure] = meter.split('/').map(Number);
+
+            for (const note of notes) {
+                const abcNote = midiToABC(note.midi, key);
+                const beats = Math.min(note.beats, 4); // 最多 4 拍
+
+                // 添加音符
+                abc += abcNote;
+
+                // 添加时值
+                if (beats > 1) {
+                    abc += beats;
+                }
+
+                beatCounter += beats;
+
+                // 小节线
+                if (beatCounter >= beatsPerMeasure) {
+                    abc += ' | ';
+                    beatCounter = 0;
+
+                    // 换行（每 4 小节）
+                    if (notes.indexOf(note) % (beatsPerMeasure * 4) === beatsPerMeasure * 3) {
+                        abc += '\n';
+                    }
+                }
+            }
+
+            // 结束线
+            if (beatCounter > 0) {
+                abc += ' |]';
+            }
+
+            return abc;
+        }
+
+        // ==================== 转换按钮事件 ====================
+        convertBtn.addEventListener('click', async () => {
+            if (!audioBuffer) {
+                showStatus(convertStatus, '请先录音', 'error');
+                return;
+            }
+
+            showStatus(convertStatus, '正在分析音频...', 'info');
+
+            // 获取设置
+            const settings = {
+                key: document.getElementById('keySelect').value,
+                meter: document.getElementById('meterSelect').value,
+                noteLength: document.getElementById('noteLengthSelect').value
+            };
+
+            // 获取音频数据（单声道）
+            const channelData = audioBuffer.getChannelData(0);
+            const sampleRate = audioBuffer.sampleRate;
+
+            // 检测音高
+            const pitchResults = detectPitch(channelData, sampleRate);
+
+            if (pitchResults.length === 0) {
+                showStatus(convertStatus, '未检测到有效音高，请确保录音中有清晰的哼唱', 'error');
+                return;
+            }
+
+            showStatus(convertStatus, `检测到 ${pitchResults.length} 个音高片段，正在转换...`, 'info');
+
+            // 处理旋律
+            const notes = processMelody(pitchResults, settings);
+
+            if (notes.length === 0) {
+                showStatus(convertStatus, '无法转换为音符', 'error');
+                return;
+            }
+
+            // 生成 ABC
+            currentABC = generateABC(notes, settings);
+
+            // 显示 ABC
+            abcOutput.textContent = currentABC;
+
+            // 启用播放按钮
+            playBtn.disabled = false;
+            stopBtn.disabled = false;
+            copyBtn.disabled = false;
+
+            showStatus(convertStatus, `转换完成！生成了 ${notes.length} 个音符`, 'success');
+        });
+
+        // ==================== 播放功能 ====================
+        let abcSynth = null;
+
+        playBtn.addEventListener('click', () => {
+            if (!currentABC) return;
+
+            // 渲染乐谱
+            ABCJS.renderAbc('sheet-music', currentABC, {
+                responsive: 'resize',
+                add_classes: true
+            });
+
+            // 播放
+            if (ABCJS.synth.supportsAudio()) {
+                abcSynth = new ABCJS.synth.CreateSynth();
+                const visualObj = ABCJS.renderAbc('*', currentABC)[0];
+
+                abcSynth.init({
+                    visualObj: visualObj,
+                    options: { }
+                }).then(() => {
+                    return abcSynth.prime();
+                }).then(() => {
+                    abcSynth.start();
+                    playBtn.textContent = '⏸ 播放中...';
+                    playBtn.disabled = true;
+                }).catch(console.error);
+            }
+        });
+
+        stopBtn.addEventListener('click', () => {
+            if (abcSynth) {
+                abcSynth.stop();
+                playBtn.textContent = '▶ 播放';
+                playBtn.disabled = false;
+            }
+        });
+
+        // 复制 ABC
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(currentABC).then(() => {
+                copyBtn.textContent = '✅ 已复制';
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 复制 ABC';
+                }, 2000);
+            });
+        });
+
+        // ==================== 辅助函数 ====================
+        function showStatus(element, message, type) {
+            element.style.display = 'block';
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+    </script>
+</body>
+</html>
