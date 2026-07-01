@@ -11,6 +11,7 @@
 - [学习路径设计](learning-path-design.md) — 平滑推进、概念够用就行、每个阶段都要动手
 - [SubAgent 概念了解](subagent-concept-intro.md) — 已了解概念，暂不深入，先学好单 Agent
 - [不要迎合用户](honesty-over-sycophancy.md) — 诚实比认同更重要，不确定就说不确定
+- [Agent 核心理解](agent-core-understanding.md) — 用户对 Agent 范式、提示词、工具调用的整体认知
 
 ## 使用说明
 

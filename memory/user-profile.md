@@ -12,7 +12,7 @@ metadata:
 - Java 程序员，有后端开发经验
 - 不打算系统学习 Python，只要能看懂、能写 demo 就行
 
-## 当前学习进度（2026-06-08）
+## 当前学习进度（2026-07-01）
 
 ### 已完成
 
@@ -24,6 +24,8 @@ metadata:
 - [x] 理解了 API 入参和出参结构（docs/chatbot/day01_api_params.md）
 - [x] 实现了多轮对话聊天机器人（demos/chatbot/chatbot_while.py），通过 history 列表保存上下文
 - [x] 学习了 Function Calling 概念，跑通了基础 demo 和终端工具 demo
+- [x] 理解了 ReAct 模式的本质（设计范式 vs 提示词手段的区别）
+- [x] 能够识别 AI 回复中的概念混淆（如 Function Calling 和 ReAct 的层次问题）
 
 ### 进行中
 

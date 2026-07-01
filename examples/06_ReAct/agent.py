@@ -136,5 +136,5 @@ if __name__ == '__main__':
     agent = ReActAgent(llm_client=llm_client, tool_executor=tool_executor)
 
     # 测试问题
-    test_question = "英伟达最新的GPU型号是什么？"
+    test_question = "小米的mimo模型怎么样，居然会陷入思考的无限循环？"
     agent.run(test_question)
